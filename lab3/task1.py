@@ -19,23 +19,33 @@ def face(x_center, y_center, radius):
 
 
 def eyes(x_center, y_center, radius):
-    circle(screen, red, (round(x_center - radius / 2),
-                         round(y_center - radius / 2)),
-                         round(radius / 5))
-    circle(screen, red, (round(x_center + radius / 2),
-                         round(y_center - radius / 2)),
-                         round(radius / 5))
-    circle(screen, black, (round(x_center - radius / 2),
-                           round(y_center - radius / 2)),
-                           round(radius / 10))
-    circle(screen, black, (round(x_center + radius / 2),
-                           round(y_center - radius / 2)),
-                           round(radius / 10))
+    circle(screen,
+           red,
+           (round(x_center - radius / 2),
+            round(y_center - radius / 2)),
+            round(radius / 5))
+    circle(screen,
+           red,
+           (round(x_center + radius / 2),
+            round(y_center - radius / 2)),
+            round(radius / 5))
+    circle(screen,
+           black,
+           (round(x_center - radius / 2),
+           round(y_center - radius / 2)),
+           round(radius / 10))
+    circle(screen,
+           black,
+           (round(x_center + radius / 2),
+           round(y_center - radius / 2)),
+           round(radius / 10))
 
 
 def eyebrows(x_center, y_center, radius):
-    polygon(screen, brown,
-            [[x_center - 0.7 * radius, y_center - radius],
+    polygon(screen,
+            brown,
+            [
+             [x_center - 0.7 * radius, y_center - radius],
              [x_center - 0.6 * radius, y_center - 1.1 * radius],
              [x_center - 0.1 * radius, y_center - 0.5 * radius],
              [x_center - 0.2 * radius, y_center - 0.4 * radius]])

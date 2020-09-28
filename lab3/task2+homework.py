@@ -213,10 +213,10 @@ def balcony(alfa, shift_x, shift_y, n):
     polygon(screen,
             (50, 50, 50),
             [
-                [round(shift_x + 0), round(shift_y + alfa * 200)],
-                [round(shift_x + alfa * (right + 60)), round(shift_y + alfa * 200)],
-                [round(shift_x + alfa * (right + 30)), round(shift_y + alfa * 160)],
-                [round(shift_x + 0 + alfa * 30), round(shift_y + alfa * 160)]
+            [round(shift_x + 0), round(shift_y + alfa * 200)],
+            [round(shift_x + alfa * (right + 60)), round(shift_y + alfa * 200)],
+            [round(shift_x + alfa * (right + 30)), round(shift_y + alfa * 160)],
+            [round(shift_x + 0 + alfa * 30), round(shift_y + alfa * 160)]
             ]
             )
 
