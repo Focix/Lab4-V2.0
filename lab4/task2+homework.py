@@ -11,48 +11,78 @@ white = (255, 255, 255)
 red = (255, 0, 0)
 black = (0, 0, 0)
 blue = (0, 0, 255)
+small_cloud_colour1 = [100, 100, 100]
+small_cloud_colour2 = [150, 150, 150]
+small_cloud_colour3 = [125, 125, 125]
+small_cloud_colour4 = [200, 200, 200]
+house_colour1 = (60, 82, 45)
+house_colour2 = (160, 82, 45)
+window_colour1 = (160, 100, 90)
+window_colour2 = (255, 255, 90)
+balcony_colour1 = (40, 50, 45)
+balcony_colour2 = (50, 50, 50)
+pipes_colour = (250, 150, 50)
+big_cloud_colour1 = (100, 100, 100)
+big_cloud_colour2 = (150, 150, 150)
+big_cloud_colour3 = (125, 125, 125)
+big_cloud_colour4 = (200, 200, 200)
+
 # moon
 circle(screen, white, (700, 100), 100)
 
-colour1 = (100, 100, 100)
-colour2 = (150, 150, 150)
-colour3 = (125, 125, 125)
-colour4 = (200, 200, 200)
-
 
 # clouds
-def big_clouds():
-    ellipse(screen, colour1, (20, 50, 300, 30))
-    ellipse(screen, colour2, (200, 30, 400, 50))
-    ellipse(screen, colour3, (250, 60, 500, 50))
-    ellipse(screen, colour4, (500, 100, 300, 50))
+def big_clouds(x, y):
+    '''
+    Функция рисует большие облака
+    '''
+    ellipse(screen, big_cloud_colour1, (x, y, 300, 30))
+    ellipse(screen, big_cloud_colour2, (x + 180, y - 20, 400, 50))
+    ellipse(screen, big_cloud_colour3, (x + 230, y + 10, 500, 50))
+    ellipse(screen, big_cloud_colour4, (x + 480, y + 50, 300, 50))
 
 
 def small_clouds(alfa, shift_x, shift_y, n):
-    # alfa-size factor
-    # n-transparency
-    ellipse(screen, (100, 100, 100, n),
+    '''
+    Функция рисует маленькие облака
+    alfa - коэффициент, меняющий размер маленького облака
+    shift_x - абсцисса центра облака
+    shift_y - ордината центра облака
+    n - прозрачность облака
+    '''
+    small_cloud_colour1.append(n)
+    small_cloud_colour2.append(n)
+    small_cloud_colour3.append(n)
+    small_cloud_colour4.append(n)
+    ellipse(screen, small_cloud_colour1,
             (shift_x + 20, shift_y + 50,
              round(alfa * 300),
              round(alfa * 30)))
-    ellipse(screen, (150, 150, 150, n),
+    ellipse(screen, small_cloud_colour2,
             (shift_x + 200, shift_y + 30,
              round(alfa * 400),
              round(alfa * 50)))
-    ellipse(screen, (125, 125, 125, n),
+    ellipse(screen, small_cloud_colour3,
             (shift_x + 250, shift_y + 60,
              round(alfa * 500),
              round(alfa * 50)))
-    ellipse(screen, (200, 200, 200, n),
+    ellipse(screen, small_cloud_colour4,
             (shift_x + 500, shift_y + 100,
              round(alfa * 300),
              round(alfa * 50)))
-
+    small_cloud_colour1.pop(3)
+    small_cloud_colour2.pop(3)
+    small_cloud_colour3.pop(3)
+    small_cloud_colour4.pop(3)
 
 def house_full(alfa, shift_x, shift_y, n):
-    # alfa-size factor
-    # shift_x, shift_y - axis shift
-    # n-transparency
+    '''
+
+    alfa - коэффициент, меняющий размер дома
+    shift_x - абсцисса верхнего левого угла дома
+    shift_y - ордината верхнего левого угла дома
+    n - прозрачность дома
+    '''
     house(alfa, shift_x, shift_y, n)
     windows(alfa, shift_x, shift_y, n)
     balcony(alfa, shift_x, shift_y, n)
@@ -60,12 +90,16 @@ def house_full(alfa, shift_x, shift_y, n):
 
 
 def house(alfa, shift_x, shift_y, n):
-    # alfa-size factor
-    # shift_x, shift_y - axis shift
-    # n-transparency
+    '''
+
+    alfa - коэффициент, меняющий размер дома
+    shift_x - абсцисса верхнего левого угла дома
+    shift_y - ордината верхнего левого угла дома
+    n - прозрачность дома
+    '''
     right = 330
 
-    rect(screen, (160, 82, 45),
+    rect(screen, house_colour2,
          (round(shift_x + alfa * 30),
           round(shift_y + alfa * 200),
           round(alfa * right),
@@ -79,7 +113,7 @@ def house(alfa, shift_x, shift_y, n):
                 round(shift_y + alfa * 200))
                 )
     for i in range(4):
-        rect(screen, (60, 82, 45), (
+        rect(screen, house_colour1, (
             round(shift_x + alfa * 50 + i * alfa * 70),
             round(shift_y + alfa * 200),
             round(alfa * 50),
@@ -93,10 +127,13 @@ def house(alfa, shift_x, shift_y, n):
 
 
 def windows(alfa, shift_x, shift_y, n):
-    # alfa-size factor
-    # shift_x, shift_y - axis shift
-    # n-transparency
-    right = 330
+    '''
+
+    alfa - коэффициент, меняющий размер окна
+    shift_x - абсцисса верхнего левого угла дома
+    shift_y - ордината верхнего левого угла дома
+    n - прозрачность окна
+    '''
     x_window = alfa * 50
     y_window = alfa * 700
     x_plus = alfa * 50
@@ -104,7 +141,7 @@ def windows(alfa, shift_x, shift_y, n):
     x_step = alfa * 100
 
     rect(screen,
-         (160, 100, 90),
+         window_colour1,
          (round(shift_x + x_window),
          round(shift_y + y_window),
          round(x_plus),
@@ -115,7 +152,7 @@ def windows(alfa, shift_x, shift_y, n):
     screen.blit(s, (round(shift_x + x_window),
                     round(shift_y + y_window)))
     rect(screen,
-         (160, 100, 90),
+         window_colour1,
          (round(shift_x + x_window + x_step),
           round(shift_y + y_window),
           round(x_plus),
@@ -126,7 +163,7 @@ def windows(alfa, shift_x, shift_y, n):
     screen.blit(s,
                 (round(shift_x + x_window + x_step),
                 round(shift_y + y_window)))
-    rect(screen, (255, 255, 90),
+    rect(screen, window_colour2,
          (round(shift_x + x_window + 2 * x_step),
           round(shift_y + y_window),
           round(x_plus),
@@ -140,17 +177,17 @@ def windows(alfa, shift_x, shift_y, n):
 
 
 def balcony(alfa, shift_x, shift_y, n):
-    # alfa-size factor
-    # shift_x, shift_y - axis shift
-    # n-transparency
+    '''
+    alfa - коэффициент, меняющий размер балкона
+    shift_x - абсцисса верхнего левого угла дома
+    shift_y - ордината верхнего левого угла дома
+    n - прозрачность балкона
+    '''
+
     right = 330
-    x_window = alfa * 50
     y_window = alfa * 700
-    x_plus = alfa * 50
-    y_plus = alfa * 60
-    x_step = alfa * 100
     rect(screen,
-         (40, 50, 45),
+         balcony_colour1,
          (round(shift_x + 0),
           round(shift_y + y_window - 200 * alfa),
           round(alfa * (right + 60)),
@@ -162,7 +199,7 @@ def balcony(alfa, shift_x, shift_y, n):
     screen.blit(s,
                 (round(shift_x + 0),
                 round(shift_y + y_window - 200 * alfa)))
-    rect(screen, (40, 50, 45), (
+    rect(screen, balcony_colour1, (
         round(shift_x + alfa * 20),
         round(shift_y + y_window - alfa * 250),
         round(alfa * (right + 20)),
@@ -173,7 +210,7 @@ def balcony(alfa, shift_x, shift_y, n):
     s.fill(white)
     screen.blit(s, (round(shift_x + alfa * 20),
                     round(shift_y + y_window - alfa * 250)))
-    rect(screen, (40, 50, 45),
+    rect(screen, balcony_colour1,
          (round(shift_x + alfa * 10),
           round(shift_y + y_window - alfa * 250),
           round(alfa * 10),
@@ -186,7 +223,7 @@ def balcony(alfa, shift_x, shift_y, n):
                 (round(shift_x + alfa * 10),
                 round(shift_y + y_window - alfa * 250)))
     for i in range(5):
-        rect(screen, (40, 50, 45), (
+        rect(screen, balcony_colour1, (
             round(shift_x + alfa * 10 + (i + 1) * alfa * 60),
             round(shift_y + y_window - alfa * 250),
             round(alfa * 20),
@@ -198,7 +235,7 @@ def balcony(alfa, shift_x, shift_y, n):
         screen.blit(s,
                     (round(shift_x + alfa * 10 + (i + 1) * alfa * 60),
                     round(shift_y + y_window - alfa * 250)))
-    rect(screen, (40, 50, 45), (
+    rect(screen, balcony_colour1, (
         round(shift_x + alfa * (right + 40)),
         round(shift_y + y_window - alfa * 250),
         round(alfa * 10),
@@ -211,7 +248,7 @@ def balcony(alfa, shift_x, shift_y, n):
                 (round(shift_x + alfa * (right + 40)),
                 round(shift_y + y_window - alfa * 250)))
     polygon(screen,
-            (50, 50, 50),
+            balcony_colour2,
             [
             [round(shift_x + 0), round(shift_y + alfa * 200)],
             [round(shift_x + alfa * (right + 60)), round(shift_y + alfa * 200)],
@@ -222,17 +259,14 @@ def balcony(alfa, shift_x, shift_y, n):
 
 
 def pipes(alfa, shift_x, shift_y, n):
-    # alfa-size factor
-    # shift_x, shift_y - axis shift
-    # n-transparency
-    right = 330
-    x_window = alfa * 50
-    y_window = alfa * 700
-    x_plus = alfa * 50
-    y_plus = alfa * 60
-    x_step = alfa * 100
+    '''
+    alfa - коэффициент, меняющий размер трубы
+    shift_x - абсцисса верхнего левого угла дома
+    shift_y - ордината верхнего левого угла дома
+    n - прозрачность трубы
+    '''
     rect(screen,
-         (250, 150, 50),
+         pipes_colour,
          (round(shift_x + alfa * 100),
           round(shift_y + alfa * 90),
           round(alfa * 20),
@@ -244,7 +278,7 @@ def pipes(alfa, shift_x, shift_y, n):
     screen.blit(s,
                 (round(shift_x + alfa * 100),
                 round(shift_y + alfa * 90)))
-    rect(screen, (250, 150, 50),
+    rect(screen, pipes_colour,
          (round(shift_x + alfa * 80),
           round(shift_y + alfa * 90),
           round(alfa * 10),
@@ -256,7 +290,7 @@ def pipes(alfa, shift_x, shift_y, n):
     screen.blit(s,
                 (round(shift_x + alfa * 80),
                 round(shift_y + alfa * 90)))
-    rect(screen, (250, 150, 50),
+    rect(screen, pipes_colour,
          (round(shift_x + alfa * 230),
           round(shift_y + alfa * 120),
           round(alfa * 10),
@@ -268,7 +302,7 @@ def pipes(alfa, shift_x, shift_y, n):
     screen.blit(s,
                 (round(shift_x + alfa * 230),
                 round(shift_y + alfa * 120)))
-    rect(screen, (250, 150, 50),
+    rect(screen, pipes_colour,
          (round(shift_x + alfa * 300),
           round(shift_y + alfa * 90),
           round(alfa * 10),
@@ -283,8 +317,14 @@ def pipes(alfa, shift_x, shift_y, n):
 
 
 def ghost(x_ghost, y_ghost, size):
-    # size>0 - right ghost
-    # size<0 - left ghost
+    '''
+
+    x_ghost - абсцисса опорной точки призрака
+    y_ghost - ордината опорной точки призрака
+    size - отвечает за ориентацию призрака,
+        если < 0 то ориентирован влево,
+        если > 0 nj ориентирован вправо
+    '''
     polygon(screen,
             white,
             [[x_ghost, y_ghost],
@@ -329,13 +369,16 @@ house(0.4, 250, 400, 100)
 small_clouds(0.4, 250, 400, 100)
 house(0.5, 0, 600, 50)
 small_clouds(0.4, 250, 400, 100)
-big_clouds()
+big_clouds(20 ,50)
 ghost(500, 500, 1)
 ghost(250, 300, -1)
 ghost(500, 750, 1)
 ghost(450, 200, -1)
 ghost(370, 660, 1)
 ghost(700, 370, -1)
+help(pipes)
+
+
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
