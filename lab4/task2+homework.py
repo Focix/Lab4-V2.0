@@ -5,7 +5,7 @@ from random import randint
 pygame.init()
 
 FPS = 30
-screen = pygame.display.set_mode((1000, 1000))
+screen = pygame.display.set_mode((1000, 800))
 rect(screen, (80, 80, 80), (0, 0, 1000, 400))
 white = (255, 255, 255)
 red = (255, 0, 0)
@@ -27,24 +27,48 @@ big_cloud_colour2 = (150, 150, 150)
 big_cloud_colour3 = (125, 125, 125)
 big_cloud_colour4 = (200, 200, 200)
 
+surface_for_big_clouds = pygame.Surface((1000, 800), pygame.SRCALPHA, 32)
+surface_for_big_clouds = surface_for_big_clouds.convert_alpha()
+surface_for_big_clouds.set_alpha(0)
+
+surface_for_house = pygame.Surface((1000, 800), pygame.SRCALPHA, 32)
+surface_for_house = surface_for_house.convert_alpha()
+surface_for_house.set_alpha(0)
+
+surface_for_ghost = pygame.Surface((1000, 800), pygame.SRCALPHA, 32)
+surface_for_ghost = surface_for_ghost.convert_alpha()
+surface_for_ghost.set_alpha(0)
+
+surface_for_small_clouds = pygame.Surface((1000, 800), pygame.SRCALPHA, 32)
+surface_for_small_clouds = surface_for_small_clouds.convert_alpha()
+surface_for_small_clouds.set_alpha(0)
+
+surfaces = [surface_for_big_clouds, surface_for_house, surface_for_ghost, surface_for_small_clouds]
+
+
+
+
+
 # moon
 circle(screen, white, (700, 100), 100)
 
 
+
 # clouds
-def big_clouds(x, y):
+def big_clouds(surface, x, y):
     '''
     Функция рисует большие облака
     '''
-    ellipse(screen, big_cloud_colour1, (x, y, 300, 30))
-    ellipse(screen, big_cloud_colour2, (x + 180, y - 20, 400, 50))
-    ellipse(screen, big_cloud_colour3, (x + 230, y + 10, 500, 50))
-    ellipse(screen, big_cloud_colour4, (x + 480, y + 50, 300, 50))
+    ellipse(surface, big_cloud_colour1, (x, y, 300, 30))
+    ellipse(surface, big_cloud_colour2, (x + 180, y - 20, 400, 50))
+    ellipse(surface, big_cloud_colour3, (x + 230, y + 10, 500, 50))
+    ellipse(surface, big_cloud_colour4, (x + 480, y + 50, 300, 50))
 
 
-def small_clouds(alfa, shift_x, shift_y, n):
+def small_clouds(surface, alfa, shift_x, shift_y, n):
     '''
     Функция рисует маленькие облака
+    surface - поверхность, на которой рисуются маленькие облака
     alfa - коэффициент, меняющий размер маленького облака
     shift_x - абсцисса центра облака
     shift_y - ордината центра облака
@@ -54,19 +78,19 @@ def small_clouds(alfa, shift_x, shift_y, n):
     small_cloud_colour2.append(n)
     small_cloud_colour3.append(n)
     small_cloud_colour4.append(n)
-    ellipse(screen, small_cloud_colour1,
+    ellipse(surface, small_cloud_colour1,
             (shift_x + 20, shift_y + 50,
              round(alfa * 300),
              round(alfa * 30)))
-    ellipse(screen, small_cloud_colour2,
+    ellipse(surface, small_cloud_colour2,
             (shift_x + 200, shift_y + 30,
              round(alfa * 400),
              round(alfa * 50)))
-    ellipse(screen, small_cloud_colour3,
+    ellipse(surface, small_cloud_colour3,
             (shift_x + 250, shift_y + 60,
              round(alfa * 500),
              round(alfa * 50)))
-    ellipse(screen, small_cloud_colour4,
+    ellipse(surface, small_cloud_colour4,
             (shift_x + 500, shift_y + 100,
              round(alfa * 300),
              round(alfa * 50)))
@@ -75,23 +99,23 @@ def small_clouds(alfa, shift_x, shift_y, n):
     small_cloud_colour3.pop(3)
     small_cloud_colour4.pop(3)
 
-def house_full(alfa, shift_x, shift_y, n):
+def house_full(surface, alfa, shift_x, shift_y, n):
     '''
-
+    surface - поверхность, на которой рисуется дом
     alfa - коэффициент, меняющий размер дома
     shift_x - абсцисса верхнего левого угла дома
     shift_y - ордината верхнего левого угла дома
     n - прозрачность дома
     '''
-    house(alfa, shift_x, shift_y, n)
-    windows(alfa, shift_x, shift_y, n)
-    balcony(alfa, shift_x, shift_y, n)
-    pipes(alfa, shift_x, shift_y, n)
+    house(surface, alfa, shift_x, shift_y, n)
+    windows(surface, alfa, shift_x, shift_y, n)
+    balcony(surface, alfa, shift_x, shift_y, n)
+    pipes(surface, alfa, shift_x, shift_y, n)
 
 
-def house(alfa, shift_x, shift_y, n):
+def house(surface, alfa, shift_x, shift_y, n):
     '''
-
+    surface - поверхность, на которой рисуется дом
     alfa - коэффициент, меняющий размер дома
     shift_x - абсцисса верхнего левого угла дома
     shift_y - ордината верхнего левого угла дома
@@ -99,7 +123,7 @@ def house(alfa, shift_x, shift_y, n):
     '''
     right = 330
 
-    rect(screen, house_colour2,
+    rect(surface, house_colour2,
          (round(shift_x + alfa * 30),
           round(shift_y + alfa * 200),
           round(alfa * right),
@@ -108,12 +132,12 @@ def house(alfa, shift_x, shift_y, n):
                         round(alfa * 600)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s,
+    surface.blit(s,
                 ((round(shift_x + alfa * 30)),
                 round(shift_y + alfa * 200))
                 )
     for i in range(4):
-        rect(screen, house_colour1, (
+        rect(surface, house_colour1, (
             round(shift_x + alfa * 50 + i * alfa * 70),
             round(shift_y + alfa * 200),
             round(alfa * 50),
@@ -121,14 +145,14 @@ def house(alfa, shift_x, shift_y, n):
         s = pygame.Surface((round(alfa * 50), round(alfa * 300)))
         s.set_alpha(n)
         s.fill(white)
-        screen.blit(s,
+        surface.blit(s,
                     (round(shift_x + alfa * 50 + i * alfa * 70),
                     round(shift_y + alfa * 200)))
 
 
-def windows(alfa, shift_x, shift_y, n):
+def windows(surface, alfa, shift_x, shift_y, n):
     '''
-
+    surface - поверхность, на которой рисуются окна дом
     alfa - коэффициент, меняющий размер окна
     shift_x - абсцисса верхнего левого угла дома
     shift_y - ордината верхнего левого угла дома
@@ -140,7 +164,7 @@ def windows(alfa, shift_x, shift_y, n):
     y_plus = alfa * 60
     x_step = alfa * 100
 
-    rect(screen,
+    rect(surface,
          window_colour1,
          (round(shift_x + x_window),
          round(shift_y + y_window),
@@ -149,9 +173,9 @@ def windows(alfa, shift_x, shift_y, n):
     s = pygame.Surface((round(x_plus), round(y_plus)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s, (round(shift_x + x_window),
+    surface.blit(s, (round(shift_x + x_window),
                     round(shift_y + y_window)))
-    rect(screen,
+    rect(surface,
          window_colour1,
          (round(shift_x + x_window + x_step),
           round(shift_y + y_window),
@@ -160,10 +184,10 @@ def windows(alfa, shift_x, shift_y, n):
     s = pygame.Surface((round(x_plus), round(y_plus)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s,
+    surface.blit(s,
                 (round(shift_x + x_window + x_step),
                 round(shift_y + y_window)))
-    rect(screen, window_colour2,
+    rect(surface, window_colour2,
          (round(shift_x + x_window + 2 * x_step),
           round(shift_y + y_window),
           round(x_plus),
@@ -172,12 +196,13 @@ def windows(alfa, shift_x, shift_y, n):
                         round(y_plus)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s, (round(shift_x + x_window + 2 * x_step),
+    surface.blit(s, (round(shift_x + x_window + 2 * x_step),
                     round(shift_y + y_window)))
 
 
-def balcony(alfa, shift_x, shift_y, n):
+def balcony(surface, alfa, shift_x, shift_y, n):
     '''
+    surface - поверхность, на которой рисуется балкон дом
     alfa - коэффициент, меняющий размер балкона
     shift_x - абсцисса верхнего левого угла дома
     shift_y - ордината верхнего левого угла дома
@@ -186,7 +211,7 @@ def balcony(alfa, shift_x, shift_y, n):
 
     right = 330
     y_window = alfa * 700
-    rect(screen,
+    rect(surface,
          balcony_colour1,
          (round(shift_x + 0),
           round(shift_y + y_window - 200 * alfa),
@@ -196,10 +221,10 @@ def balcony(alfa, shift_x, shift_y, n):
                         round(alfa * 30)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s,
+    surface.blit(s,
                 (round(shift_x + 0),
                 round(shift_y + y_window - 200 * alfa)))
-    rect(screen, balcony_colour1, (
+    rect(surface, balcony_colour1, (
         round(shift_x + alfa * 20),
         round(shift_y + y_window - alfa * 250),
         round(alfa * (right + 20)),
@@ -208,9 +233,9 @@ def balcony(alfa, shift_x, shift_y, n):
                         round(alfa * 20)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s, (round(shift_x + alfa * 20),
+    surface.blit(s, (round(shift_x + alfa * 20),
                     round(shift_y + y_window - alfa * 250)))
-    rect(screen, balcony_colour1,
+    rect(surface, balcony_colour1,
          (round(shift_x + alfa * 10),
           round(shift_y + y_window - alfa * 250),
           round(alfa * 10),
@@ -219,11 +244,11 @@ def balcony(alfa, shift_x, shift_y, n):
                         round(alfa * 50)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s,
+    surface.blit(s,
                 (round(shift_x + alfa * 10),
                 round(shift_y + y_window - alfa * 250)))
     for i in range(5):
-        rect(screen, balcony_colour1, (
+        rect(surface, balcony_colour1, (
             round(shift_x + alfa * 10 + (i + 1) * alfa * 60),
             round(shift_y + y_window - alfa * 250),
             round(alfa * 20),
@@ -232,10 +257,10 @@ def balcony(alfa, shift_x, shift_y, n):
                             round(alfa * 50)))
         s.set_alpha(n)
         s.fill(white)
-        screen.blit(s,
+        surface.blit(s,
                     (round(shift_x + alfa * 10 + (i + 1) * alfa * 60),
                     round(shift_y + y_window - alfa * 250)))
-    rect(screen, balcony_colour1, (
+    rect(surface, balcony_colour1, (
         round(shift_x + alfa * (right + 40)),
         round(shift_y + y_window - alfa * 250),
         round(alfa * 10),
@@ -244,10 +269,10 @@ def balcony(alfa, shift_x, shift_y, n):
                         round(alfa * 50)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s,
+    surface.blit(s,
                 (round(shift_x + alfa * (right + 40)),
                 round(shift_y + y_window - alfa * 250)))
-    polygon(screen,
+    polygon(surface,
             balcony_colour2,
             [
             [round(shift_x + 0), round(shift_y + alfa * 200)],
@@ -258,14 +283,15 @@ def balcony(alfa, shift_x, shift_y, n):
             )
 
 
-def pipes(alfa, shift_x, shift_y, n):
+def pipes(surface, alfa, shift_x, shift_y, n):
     '''
+    surface - поверхность, на которой рисуются трубы дом
     alfa - коэффициент, меняющий размер трубы
     shift_x - абсцисса верхнего левого угла дома
     shift_y - ордината верхнего левого угла дома
     n - прозрачность трубы
     '''
-    rect(screen,
+    rect(surface,
          pipes_colour,
          (round(shift_x + alfa * 100),
           round(shift_y + alfa * 90),
@@ -275,10 +301,10 @@ def pipes(alfa, shift_x, shift_y, n):
                         round(alfa * 100)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s,
+    surface.blit(s,
                 (round(shift_x + alfa * 100),
                 round(shift_y + alfa * 90)))
-    rect(screen, pipes_colour,
+    rect(surface, pipes_colour,
          (round(shift_x + alfa * 80),
           round(shift_y + alfa * 90),
           round(alfa * 10),
@@ -287,10 +313,10 @@ def pipes(alfa, shift_x, shift_y, n):
                         round(alfa * 90)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s,
+    surface.blit(s,
                 (round(shift_x + alfa * 80),
                 round(shift_y + alfa * 90)))
-    rect(screen, pipes_colour,
+    rect(surface, pipes_colour,
          (round(shift_x + alfa * 230),
           round(shift_y + alfa * 120),
           round(alfa * 10),
@@ -299,10 +325,10 @@ def pipes(alfa, shift_x, shift_y, n):
                         round(alfa * 50)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s,
+    surface.blit(s,
                 (round(shift_x + alfa * 230),
                 round(shift_y + alfa * 120)))
-    rect(screen, pipes_colour,
+    rect(surface, pipes_colour,
          (round(shift_x + alfa * 300),
           round(shift_y + alfa * 90),
           round(alfa * 10),
@@ -311,21 +337,21 @@ def pipes(alfa, shift_x, shift_y, n):
                         round(alfa * 80)))
     s.set_alpha(n)
     s.fill(white)
-    screen.blit(s,
+    surface.blit(s,
                 (round(shift_x + alfa * 300),
                 round(shift_y + alfa * 90)))
 
 
-def ghost(x_ghost, y_ghost, size):
+def ghost(surface, x_ghost, y_ghost, size):
     '''
-
+    surface - поверхность, на которой рисуются призраки
     x_ghost - абсцисса опорной точки призрака
     y_ghost - ордината опорной точки призрака
     size - отвечает за ориентацию призрака,
         если < 0 то ориентирован влево,
         если > 0 nj ориентирован вправо
     '''
-    polygon(screen,
+    polygon(surface,
             white,
             [[x_ghost, y_ghost],
             [x_ghost + size * 50, y_ghost + 45],
@@ -355,28 +381,32 @@ def ghost(x_ghost, y_ghost, size):
             [x_ghost - size * 40, y_ghost + 65],
             [x_ghost - size * 30, y_ghost + 60],
             [x_ghost, y_ghost]])
-    circle(screen, white, (x_ghost, y_ghost), 30)
-    circle(screen, blue, (x_ghost - 10, y_ghost - 5), 7)
-    circle(screen, blue, (x_ghost + 10, y_ghost - 5), 7)
-    circle(screen, red, (x_ghost - 10, y_ghost - 5), 3)
-    circle(screen, red, (x_ghost + 10, y_ghost - 5), 3)
-    ellipse(screen, black, (x_ghost - 7, y_ghost + 7, 20, 20))
+    circle(surface, white, (x_ghost, y_ghost), 30)
+    circle(surface, blue, (x_ghost - 10, y_ghost - 5), 7)
+    circle(surface, blue, (x_ghost + 10, y_ghost - 5), 7)
+    circle(surface, red, (x_ghost - 10, y_ghost - 5), 3)
+    circle(surface, red, (x_ghost + 10, y_ghost - 5), 3)
+    ellipse(surface, black, (x_ghost - 7, y_ghost + 7, 20, 20))
 
 
-house(0.3, 500, 300, 200)
-small_clouds(0.3, 500, 300, 200)
-house(0.4, 250, 400, 100)
-small_clouds(0.4, 250, 400, 100)
-house(0.5, 0, 600, 50)
-small_clouds(0.4, 250, 400, 100)
-big_clouds(20 ,50)
-ghost(500, 500, 1)
-ghost(250, 300, -1)
-ghost(500, 750, 1)
-ghost(450, 200, -1)
-ghost(370, 660, 1)
-ghost(700, 370, -1)
-help(pipes)
+
+house_full(surface_for_house, 0.3, 500, 300, 200)
+small_clouds(surface_for_small_clouds, 0.3, 500, 300, 200)
+house_full(surface_for_house, 0.4, 250, 400, 100)
+small_clouds(surface_for_small_clouds, 0.4, 250, 400, 100)
+house_full(surface_for_house, 0.5, 0, 600, 50)
+small_clouds(surface_for_small_clouds, 0.4, 250, 400, 100)
+big_clouds(surface_for_big_clouds, 20 ,50)
+ghost(surface_for_ghost, 500, 500, 1)
+ghost(surface_for_ghost, 250, 300, -1)
+ghost(surface_for_ghost, 500, 750, 1)
+ghost(surface_for_ghost, 450, 200, -1)
+ghost(surface_for_ghost, 370, 660, 1)
+ghost(surface_for_ghost, 700, 370, -1)
+
+#наложение всех поверхностей
+for i in surfaces:
+    screen.blit(i, (0, 0))
 
 
 pygame.display.update()
